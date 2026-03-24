@@ -1,0 +1,21 @@
+Date,Outflow,Inflow,Category,Account,Payee,Memo
+2025-03-01,45.23,,Groceries,Main,Tesco,'Tesco' tesco stores
+2025-03-02,32.1,,Groceries,Main,Sainsburys,'Sainsburys' sainsburys supermarket
+2025-03-03,19.99,,Shopping,Main,Amazon,'Amazon' amazon payments
+2025-03-03,10.99,,Subscriptions,Main,Netflix,'Netflix' netflix
+2025-03-04,9.99,,Subscriptions,Main,Spotify,'Spotify' spotify premium
+2025-03-05,60.0,,Fuel,Main,Shell,'Shell' shell petrol
+2025-03-06,55.4,,Fuel,Main,BP,'BP' bp fuel
+2025-03-07,4.75,,Eating Out,Main,Costa,'Costa' costa coffee
+2025-03-08,8.5,,Eating Out,Main,McDonalds,'McDonalds' mcdonalds
+2025-03-09,35.0,,Bills,Main,Vodafone,'Vodafone' vodafone mobile
+2025-03-10,49.0,,Bills,Main,Virgin Media,'Virgin Media' virgin media services
+2025-03-11,25.99,,Health & Fitness,Main,PureGym,'PureGym' puregym
+2025-03-12,14.99,,Shopping,Main,PayPal,'PayPal' paypal payment
+2025-03-13,12.3,,Groceries,Main,Tesco,'Tesco' tesco express
+2025-03-14,,2500.0,Subscriptions,Main,PureGym,'PureGym' salary bacs
+2025-03-15,8.99,,Subscriptions,Main,Amazon,'Amazon' amazon prime
+2025-03-16,28.75,,Groceries,Main,Sainsburys,'Sainsburys' sainsburys
+2025-03-17,6.4,,Eating Out,Main,McDonalds,'McDonalds' mcdonalds
+2025-03-18,58.2,,Fuel,Main,Shell,'Shell' shell oil
+2025-03-19,5.1,,Eating Out,Main,Costa,'Costa' costa

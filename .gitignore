@@ -1,0 +1,23 @@
+# Virtual environment
+.venv/
+
+# Personal/sensitive data files
+data/*_personal.csv
+data/*_personal.xlsx
+data/*_personal.xls
+
+# Personal trained models (generated from real data)
+models/*_personal.pkl
+
+# Personal output
+output/*_personal.csv
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
