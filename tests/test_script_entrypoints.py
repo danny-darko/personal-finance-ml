@@ -40,12 +40,13 @@ class ScriptEntrypointTests(unittest.TestCase):
                     side_effect=AssertionError("Import called " + operation),
                 ))
             spec = importlib.util.spec_from_file_location(
-                "import_check_" + name, ROOT / "scripts" / (name + ".py")
+                "scripts.import_check_" + name, ROOT / "scripts" / (name + ".py")
             )
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
             return module
 
+    # Import each script and check that importing does not start work
     def test_imports_do_not_run_the_workflow(self):
         for name in SCRIPT_NAMES:
             with self.subTest(script=name):
@@ -77,6 +78,7 @@ class ScriptEntrypointTests(unittest.TestCase):
         statement.to_excel(data / "bank_statement.xlsx", startrow=4, index=False)
         return data
 
+    # Check column order, chronological sorting, amounts, predictions, account and memo formatting
     def assert_export(self, path):
         exported = pd.read_csv(path)
         self.assertEqual(list(exported.columns), [
@@ -95,6 +97,7 @@ class ScriptEntrypointTests(unittest.TestCase):
             "'Rail' rail ticket", "'Market' market groceries",
         ])
 
+    # Checks that another python program can call functions with its own file location
     def test_functions_accept_explicit_paths(self):
         train_model_category = self.import_script("train_model_category")
         train_model_payee = self.import_script("train_model_payee")
@@ -136,6 +139,7 @@ class ScriptEntrypointTests(unittest.TestCase):
             self.make_inputs(root)
             scripts = root / "scripts"
             scripts.mkdir()
+            shutil.copyfile(ROOT / "scripts" / "model_training.py", scripts / "model_training.py")
             # Run copies so default paths cannot overwrite project artifacts.
             environment = dict(os.environ, PYTHONIOENCODING="utf-8")
             for name in SCRIPT_NAMES:
@@ -148,6 +152,9 @@ class ScriptEntrypointTests(unittest.TestCase):
                 )
                 self.assertEqual(completed.returncode, 0, completed.stderr)
                 self.assertTrue(completed.stdout.strip())
+                if name == "evaluate_model":
+                    self.assertIn("Category evaluation", completed.stdout)
+                    self.assertIn("Payee evaluation", completed.stdout)
             self.assert_export(root / "output" / "processed_transactions.csv")
 
 
