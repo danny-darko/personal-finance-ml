@@ -17,11 +17,29 @@ A Python ML tool that classifies Santander bank statement transactions using Log
 
 ## Usage
 
-Run the scripts in this order:
+Run these commands from the repository root:
 
-1. `train_model_payee.py` — trains the payee classification model
-2. `train_model_category.py` — trains the category classification model
-3. `process_transactions.py` — processes your bank statement and outputs a formatted CSV
+```bash
+python scripts/train_model_payee.py
+python scripts/train_model_category.py
+python scripts/process_transactions.py
+```
+
+Each script has a `main()` entry point guarded by `if __name__ == "__main__"`.
+Importing a script only defines its configuration and functions; it does not
+read data, train models, create directories, or write output. Call `train_model()`,
+`process_transactions()`, or `evaluate_model()` explicitly to run that work.
+These functions accept file paths so callers can use separate inputs and outputs.
+
+## Tests
+
+Run the import-safety and workflow checks with the standard-library test runner:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+The tests use synthetic data and temporary directories for models and exports.
 
 ## Project Structure
 ```

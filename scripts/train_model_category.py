@@ -5,41 +5,59 @@ import joblib
 import os
 
 # === CONFIGURATION ===
-BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # points to /src
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "..", "data")
 MODEL_DIR = os.path.join(BASE_DIR, "..", "models")
-os.makedirs(MODEL_DIR, exist_ok=True)
 
 TRAINING_FILE_CATEGORY = os.path.join(DATA_DIR, "training_data_category.csv")
 MODEL_FILE = os.path.join(MODEL_DIR, "transaction_model_category.pkl")
 VECTORIZER_FILE = os.path.join(MODEL_DIR, "vectorizer_category.pkl")
 
-# === 1. Load and Prepare Training Data ===
-if not os.path.exists(TRAINING_FILE_CATEGORY):
-    raise FileNotFoundError(f"{TRAINING_FILE_CATEGORY} not found. Please create it with Description and Category columns.")
 
-df = pd.read_csv(TRAINING_FILE_CATEGORY)
+def train_model(
+    training_file=TRAINING_FILE_CATEGORY,
+    model_file=MODEL_FILE,
+    vectorizer_file=VECTORIZER_FILE,
+):
+    """Train and save the category model using the supplied file paths."""
+    # === 1. Load and Prepare Training Data ===
+    if not os.path.exists(training_file):
+        raise FileNotFoundError(f"{training_file} not found. Please create it with Description and Category columns.")
 
-# Basic checks
-if 'Description' not in df.columns or 'Category' not in df.columns:
-    raise ValueError("Your CSV must have columns: Description and Category")
+    df = pd.read_csv(training_file)
 
-# Clean text
-df['Description'] = df['Description'].astype(str).str.lower().str.strip()
-df['Category'] = df['Category'].astype(str).str.strip()
+    # Basic checks
+    if 'Description' not in df.columns or 'Category' not in df.columns:
+        raise ValueError("Your CSV must have columns: Description and Category")
 
-# === 2. Vectorize Text ===
-vectorizer = TfidfVectorizer(ngram_range=(1, 2))  # Unigrams + bigrams
-X = vectorizer.fit_transform(df['Description'])
-y = df['Category']
+    # Clean text
+    df['Description'] = df['Description'].astype(str).str.lower().str.strip()
+    df['Category'] = df['Category'].astype(str).str.strip()
 
-# === 3. Train the Model ===
-model = LogisticRegression(max_iter=1000)
-model.fit(X, y)
+    # === 2. Vectorize Text ===
+    vectorizer = TfidfVectorizer(ngram_range=(1, 2))  # Unigrams + bigrams
+    X = vectorizer.fit_transform(df['Description'])
+    y = df['Category']
 
-# === 4. Save Model and Vectorizer ===
-joblib.dump(model, MODEL_FILE)
-joblib.dump(vectorizer, VECTORIZER_FILE)
+    # === 3. Train the Model ===
+    model = LogisticRegression(max_iter=1000)
+    model.fit(X, y)
 
-print(f"✅ Model trained on {len(df)} examples and saved to '{MODEL_FILE}'")
-print(f"✅ Vectorizer saved to '{VECTORIZER_FILE}'")
+    # === 4. Save Model and Vectorizer ===
+    os.makedirs(os.path.dirname(os.path.abspath(model_file)), exist_ok=True)
+    os.makedirs(os.path.dirname(os.path.abspath(vectorizer_file)), exist_ok=True)
+    joblib.dump(model, model_file)
+    joblib.dump(vectorizer, vectorizer_file)
+
+    print(f"Model trained on {len(df)} examples and saved to '{model_file}'")
+    print(f"Vectorizer saved to '{vectorizer_file}'")
+    return model, vectorizer
+
+
+def main():
+    """Train using the default project files."""
+    train_model()
+
+
+if __name__ == "__main__":
+    main()
